@@ -51,6 +51,10 @@ def main():
             if player.check_collision(ast):
                 print("Game over!")
                 exit()
+            for sh in shots:
+                if ast.check_collision(sh):
+                    ast.split()
+                    sh.kill()
         
         for drw in drawable:
             drw.draw(screen)
