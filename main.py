@@ -1,7 +1,13 @@
 import pygame
 from constants import *
+from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 run_game_loop = True
+#updateable = pygame.sprite.Group()
+#drawable = pygame.sprite.Group()
+#asteroids = pygame.sprite.Group()
 
 def main():
     print("Starting asteroids!")
@@ -9,10 +15,23 @@ def main():
     print(f"Screen height: {SCREEN_HEIGHT}")
 
     pygame.init()
+
+
+    updateable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
+
+    Player.containers = (updateable, drawable)
+    Asteroid.containers = (asteroids, updateable, drawable)
+    AsteroidField.containers = (updateable)
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     dt = 0
     frameclock = pygame.time.Clock() 
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, PLAYER_RADIUS)
+    asteroid_field = AsteroidField()
 
+    
 
     while run_game_loop:
         for event in pygame.event.get():
@@ -20,6 +39,13 @@ def main():
                 return
         
         pygame.Surface.fill(screen, (0,0,0))
+
+        # update and draw per tick
+        for upd in updateable:
+            upd.update(dt)
+        
+        for drw in drawable:
+            drw.draw(screen)
         
         
         pygame.display.flip()
